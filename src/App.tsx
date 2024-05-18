@@ -1,14 +1,7 @@
-import { Body } from "./components/Body";
-import { Footer } from "./components/Footer";
-import { Header } from "./components/Header";
-
+// Unused. See main.tsx
 const App = () => {
   return (
-    <div className="w-screen h-screen flex flex-col text-white text-xl">
-      <Header />
-      <Body />
-      <Footer />
-    </div>
+    <div className="flex flex-col w-screen h-screen text-xl text-white"></div>
   );
 };
 
