@@ -17,7 +17,7 @@ import { Layout } from './Layout';
 // };
 
 import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css';
-import { MainContainer, ChatContainer, MessageList, Message, MessageInput } from '@chatscope/chat-ui-kit-react';
+import { MainContainer, ChatContainer, MessageList, Message, MessageInput, MessageTextContent } from '@chatscope/chat-ui-kit-react';
 import { useState } from 'react';
 
 export const Team = () => {
@@ -26,7 +26,8 @@ export const Team = () => {
     <Layout>
       <div className='size-full'>
         <MainContainer>
-          <ChatContainer>       
+          <ChatContainer>
+            <div>Textbox</div>
             <MessageList>
                 {messages.map(message => 
                 <Message model={{
@@ -38,7 +39,7 @@ export const Team = () => {
                   }} />
                   )}
               </MessageList>
-            <MessageInput placeholder="Type message here"/>        
+            <MessageInput placeholder='Type Message' onSend={(innerHtml)=>setMessages([...messages, innerHtml])}/>   
           </ChatContainer>
         </MainContainer>
       </div>
