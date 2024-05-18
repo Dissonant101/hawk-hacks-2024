@@ -1,33 +1,27 @@
-// import { TextField } from '@mui/material';
 import { Layout } from './Layout';
-
-// export const Team = () => {
-//   return (
-//     <Layout>
-//       <div>
-//         <div className="size-full bg-white">
-//           <div></div>
-//         </div>
-//         <div className='bg-white flex flex-col justify-between'>
-//           <TextField id="message-box" multiline variant="outlined" rows={3} fullWidth color='success'/>
-//         </div>
-//       </div>
-//     </Layout>
-//   )
-// };
-
 import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css';
-import { MainContainer, ChatContainer, MessageList, Message, MessageInput, MessageTextContent } from '@chatscope/chat-ui-kit-react';
+import { MainContainer, ChatContainer, MessageList, Message, MessageInput, ConversationHeader } from '@chatscope/chat-ui-kit-react';
 import { useState } from 'react';
 
 export const Team = () => {
-  const [messages, setMessages] = useState<string[]>(["message1", "message2"])
+  const [messages, setMessages] = useState<string[]>([]);
   return (
     <Layout>
       <div className='size-full'>
         <MainContainer>
           <ChatContainer>
-            <div>Textbox</div>
+            <ConversationHeader>
+              <ConversationHeader.Content>
+                <span
+                  style={{
+                    alignSelf: 'flex-center',
+                    color: '#ec1212'
+                  }}
+                >
+                  Manage your team
+                </span>
+              </ConversationHeader.Content>
+            </ConversationHeader>
             <MessageList>
                 {messages.map(message => 
                 <Message model={{
@@ -39,7 +33,7 @@ export const Team = () => {
                   }} />
                   )}
               </MessageList>
-            <MessageInput placeholder='Type Message' onSend={(innerHtml)=>setMessages([...messages, innerHtml])}/>   
+            <MessageInput attachButton={false} placeholder='Type Message' onSend={(innerHtml)=>setMessages([...messages, innerHtml])}/>   
           </ChatContainer>
         </MainContainer>
       </div>
