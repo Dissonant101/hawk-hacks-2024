@@ -2,6 +2,7 @@
 import express from 'express';
 import githubUsername from 'github-username';
 import cors from 'cors';
+import { FRONTEND_URL } from '../src/constant';
 
 // Create an instance of the express application
 const app = express();
@@ -9,7 +10,7 @@ const app = express();
 app.use(cors());
 
 var corsOptions = {
-  origin: FRONT_URL,
+  origin: FRONTEND_URL,
   optionsSuccessStatus: 200,
 };
 
@@ -22,7 +23,7 @@ app.listen(port, () => {
 });
 
 // Create a route and a handler for GET /githubemail
-app.post('/github', (req, res) => {
+app.post('/github', cors(corsOptions), (req, res) => {
   // Send the posts array as a JSON response
 
   console.log(req);

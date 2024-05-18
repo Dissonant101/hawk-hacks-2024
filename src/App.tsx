@@ -11,9 +11,9 @@ export const SessionContext = createContext(null);
 const App = withAuthInfo((props: WithAuthInfoProps) => {
   return (
     <div>
-      {!props.isLoggedIn && <Navigate to="/auth" replace={true} />}
       <SessionContext.Provider value={props as any}>
         <BrowserRouter>
+          {!props.isLoggedIn && <Navigate to="/auth" replace={true} />}
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/auth" element={<Auth />} />
