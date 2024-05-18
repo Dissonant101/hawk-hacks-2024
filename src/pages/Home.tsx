@@ -11,6 +11,8 @@ import bubbleShooter from '/!tinder.svg';
 import candyCrash from '/!tinder.svg';
 import clashRoyal from '/!tinder.svg';
 import EmptyState from '/!tinder.svg';
+import AuthRedirect from '../components/auth/AuthRedirect';
+import { Link } from 'react-router-dom';
 
 const Content = () => (
   <Typography px={2} variant="h6">
@@ -53,47 +55,49 @@ export const Home = () => {
   };
 
   return (
-    <Layout>
-      <Stack
-        height={'100%'}
-        width={'100%'}
-        direction="column"
-        alignItems="center"
-        justifyContent={'end'}
-        p={2}
-      >
-        <CardSwiper
-          data={mockData}
-          onEnter={handleEnter}
-          onFinish={handleFinish}
-          onDismiss={handleDismiss}
-          dislikeButton={<div>Left</div>}
-          likeButton={<div>Right</div>}
-          withActionButtons
-          withRibbons
-          likeRibbonText="INSTALL"
-          dislikeRibbonText="PASS"
-          ribbonColors={{
-            bgLike: 'green',
-            bgDislike: 'red',
-            textColor: 'white',
-          }}
-          emptyState={
-            <Stack
-              direction={'column'}
-              alignItems={'center'}
-              justifyContent={'center'}
-              textAlign={'center'}
-              gap={2}
-            >
-              <Box component={'img'} width={250} src={EmptyState} />
-              <Typography variant={'subtitle2'}>
-                You've reached the <br /> end of the list
-              </Typography>
-            </Stack>
-          }
-        />
-      </Stack>
-    </Layout>
+    <AuthRedirect>
+      <Layout>
+        <Stack
+          height={'100%'}
+          width={'100%'}
+          direction="column"
+          alignItems="center"
+          justifyContent={'end'}
+          p={2}
+        >
+          <CardSwiper
+            data={mockData}
+            onEnter={handleEnter}
+            onFinish={handleFinish}
+            onDismiss={handleDismiss}
+            dislikeButton={<div>Left</div>}
+            likeButton={<div>Right</div>}
+            withActionButtons
+            withRibbons
+            likeRibbonText="INSTALL"
+            dislikeRibbonText="PASS"
+            ribbonColors={{
+              bgLike: 'green',
+              bgDislike: 'red',
+              textColor: 'white',
+            }}
+            emptyState={
+              <Stack
+                direction={'column'}
+                alignItems={'center'}
+                justifyContent={'center'}
+                textAlign={'center'}
+                gap={2}
+              >
+                <Box component={'img'} width={250} src={EmptyState} />
+                <Typography variant={'subtitle2'}>
+                  You've reached the <br /> end of the list
+                </Typography>
+              </Stack>
+            }
+          />
+        </Stack>
+      </Layout>
+    </AuthRedirect>
   );
 };
