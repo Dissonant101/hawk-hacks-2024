@@ -3,19 +3,26 @@ import { LoginButton, SigninButton } from '../components/auth/AuthComponents';
 import { useContext, useEffect, useState } from 'react';
 import { SessionContext } from '../App';
 import { BACKEND_URL } from '../constant';
-// import githubUsername from 'github-username';
 
 export function Auth() {
   const auth = useContext(SessionContext) as any;
   const [phase, setPhase] = useState('skills');
 
-  useEffect(() => {
-    // fetch(BACKEND_URL + '/github', {});
-  }, []);
+  console.log(JSON.stringify(auth));
 
   function phaseFunction() {
     if (auth.isLoggedIn) {
       if (phase === 'skills') {
+        useEffect(() => {
+          fetch(BACKEND_URL + '/github', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email: auth.user.email }),
+          });
+        }, []);
+
         return <div>Skills</div>;
       }
     } else {

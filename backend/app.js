@@ -1,9 +1,17 @@
 // Import the express module
 import express from 'express';
 import githubUsername from 'github-username';
+import cors from 'cors';
 
 // Create an instance of the express application
 const app = express();
+
+app.use(cors());
+
+var corsOptions = {
+  origin: FRONT_URL,
+  optionsSuccessStatus: 200,
+};
 
 // Specify a port number for the server
 const port = 5000;
@@ -17,8 +25,10 @@ app.listen(port, () => {
 app.post('/github', (req, res) => {
   // Send the posts array as a JSON response
 
+  console.log(req);
+
   async function fetchGithub() {
-    const v = await githubUsername('jay.jrjren@gmail.com');
+    const v = await githubUsername();
     console.log(v);
   }
   fetchGithub();
