@@ -25,14 +25,20 @@ const UserIcon = ({
   const id = open ? 'simple-popover' : undefined;
 
   return (
-    <div>
+    <div className="flex items-center justify-between p-2">
+      <img
+        src={user.github_profile_src}
+        className="rounded-full shadow-sm shadow-gray-600 size-12"
+      />
+      <p>
+        {user.first_name} {user.last_name}
+      </p>
       <button
         className="bg-pink-400 rounded-full size-10"
         aria-label={id}
         onClick={handleClick}
       >
-        {/* User icon goes here */}
-        {user.name}
+        ...
       </button>
       <Popover
         id={id}
@@ -60,9 +66,9 @@ const UserIcon = ({
 
 export const TeamManagement = () => {
   const { user, loading } = useUser();
-  const { team, setTeam } = useTeam({ user, loading });
+  console.log({ user, loading });
 
-  console.log({ team });
+  const { team, setTeam } = useTeam({ user, loading });
 
   function onKick(team_member_id: number) {
     if (team_member_id === user.id) return;
@@ -86,7 +92,7 @@ export const TeamManagement = () => {
 
   return (
     <div className="p-4">
-      <div className="flex justify-start gap-4 p-4">
+      <div className="flex flex-col justify-start gap-4 p-4">
         {team.map((u) => (
           <UserIcon user={u} onKick={() => onKick(u.id)} key={u.id} />
         ))}
