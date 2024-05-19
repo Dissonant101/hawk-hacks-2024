@@ -30,7 +30,7 @@ export function useUser() {
           },
         },
       );
-      // console.log({ res });
+      console.log({ res });
 
       setUser(res.data.data[0]);
       setLoading(false);
