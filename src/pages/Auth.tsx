@@ -33,6 +33,7 @@ export function Auth() {
             }),
           });
           const resultJSON = await result.json();
+          console.log(resultJSON);
 
           setFormState(resultJSON);
         }

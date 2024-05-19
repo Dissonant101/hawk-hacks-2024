@@ -132,12 +132,12 @@ export const Team = () => {
                           position: 'single',
                         }}
                       >
-                        <Avatar
+                        {/* <Avatar
                           src={
                             team.filter((u) => u.id === message.sender_id)[0]
                               .github_profile_src
                           }
-                        />
+                        /> */}
                       </Message>
                     ))}
                   </>

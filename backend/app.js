@@ -11,7 +11,7 @@ app.use(cors());
 app.use(express.json());
 
 var corsOptions = {
-  origin: 'https://hawk-hacks-2024.vercel.app/',
+  origin: 'http://localhost:5173',
   optionsSuccessStatus: 200,
 };
 
@@ -52,7 +52,7 @@ app.post('/github', cors(corsOptions), async (req, res) => {
   const username = await githubUsername(req.body.email);
   const userData = await fetch('https://api.github.com/users/' + username);
   const userJSON = await userData.json();
-  const { avatar_url, name, location, bio } = userJSON;
+  const { avatar_url, location, bio } = userJSON;
 
   const repoData = await fetch(
     'https://api.github.com/users/' + username + '/repos',
