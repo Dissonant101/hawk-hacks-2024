@@ -129,10 +129,7 @@ export const Home = () => {
   return (
     <AuthRedirect>
       <Modal open={open} onClose={() => setOpen(!open)}>
-        <Container
-          maxWidth="sm"
-          className="flex flex-col items-center justify-center"
-        >
+        <Container maxWidth="sm">
           <ProfileModal id={id} />
         </Container>
       </Modal>
