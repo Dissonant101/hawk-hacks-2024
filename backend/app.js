@@ -90,19 +90,22 @@ app.post('/github', cors(corsOptions), async (req, res) => {
     },
   );
   const resultData = await result.json();
+  // console.log({ resultData });
   // Set team_id to be user.id
-  await fetch('https://us-east-2.aws.neurelo.com/rest/users/' + resultData.id, {
-    method: 'PATCH',
-    headers: {
-      'X-API-KEY': process.env.NEURELO_X_API_KEY,
-      'Content-Type': 'application/json',
+  const result2Data = await fetch(
+    'https://us-east-2.aws.neurelo.com/rest/users/' + resultData.data.id,
+    {
+      method: 'PATCH',
+      headers: {
+        'X-API-KEY': process.env.NEURELO_X_API_KEY,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        team_id: resultData.data.id,
+      }),
     },
-    body: JSON.stringify({
-      team_id: resultData.data.id,
-    }),
-  });
-
-  console.log(resultData);
+  );
+  // console.log({ result2Data });
 
   res.status(200).json(resultData.data);
 });
