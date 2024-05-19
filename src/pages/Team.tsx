@@ -8,13 +8,26 @@ import {
   MessageInput,
   ConversationHeader,
 } from '@chatscope/chat-ui-kit-react';
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { TeamManagement } from '../components/TeamManagement.tsx';
 import AuthRedirect from '../components/auth/AuthRedirect';
+import { SessionContext } from '../App';
+import axios from 'axios';
 
 export const Team = () => {
   const [messages, setMessages] = useState<string[]>([]);
   const [viewTeam, changeStatus] = useState<boolean>(false);
+  const auth = useContext(SessionContext) as any;
+
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     axios.get('http://localhost:5000').then((res) => setMessages(res.data));
+  //   }, 1000);
+  //   return () => {
+  //     clearInterval(interval);
+  //   };
+  // });
+
   return (
     <AuthRedirect>
       <Layout>
@@ -63,7 +76,15 @@ export const Team = () => {
               <MessageInput
                 attachButton={false}
                 placeholder="Type Message"
-                onSend={(innerHtml) => setMessages([...messages, innerHtml])}
+                onSend={(innerHtml) => {
+                  setMessages([...messages, innerHtml]);
+                  // const post_message = {
+                  //   senderId: auth.user.userId,
+                  //   teamId: auth.user.teamId,
+                  //   message: innerHtml,
+                  // };
+                  // axios.post('http://localhost:5000', post_message);
+                }}
               />
             </ChatContainer>
           </MainContainer>
