@@ -1,4 +1,12 @@
-import { Avatar, Box, Chip, Stack, Typography } from '@mui/material';
+import {
+  Avatar,
+  Box,
+  Chip,
+  Container,
+  Modal,
+  Stack,
+  Typography,
+} from '@mui/material';
 import { Layout } from './Layout';
 
 import tinderLogo from '/!tinder.svg';
@@ -11,9 +19,12 @@ import {
 } from '../components/react-card-swiper';
 import AuthRedirect from '../components/auth/AuthRedirect';
 import axios from 'axios';
+import { ProfileModal } from '../components/ProfileModal';
 
 export const Home = () => {
   const [users, setUsers] = useState<any[]>([]);
+  const [open, setOpen] = useState(false);
+  const [id, setId] = useState(0);
 
   useEffect(() => {
     axios
@@ -32,7 +43,14 @@ export const Home = () => {
             meta: { apk: 'some-apk-c.apk' },
             src: user.img_src,
             content: (
-              <div className="bg-slate-600 pt-4 pb-2 flex flex-col gap-2 justify-center items-center">
+              <div
+                className="bg-slate-600 pt-4 pb-2 flex flex-col gap-2 justify-center items-center hover:bg-pink-400 transition"
+                onClick={() => {
+                  console.log(user.id);
+                  setId(user.id);
+                  setOpen(!open);
+                }}
+              >
                 <div className="flex gap-2 items-center">
                   <Avatar alt={user.first_name} src={user.github_profile_src} />{' '}
                   <p className="font-main">
@@ -90,6 +108,14 @@ export const Home = () => {
 
   return (
     <AuthRedirect>
+      <Modal open={open} onClose={() => setOpen(!open)}>
+        <Container
+          maxWidth="sm"
+          className="flex flex-col justify-center items-center"
+        >
+          <ProfileModal id={id} />
+        </Container>
+      </Modal>
       <Layout>
         {users.length && (
           <Stack

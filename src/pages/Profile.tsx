@@ -5,39 +5,9 @@ import { useUser } from '../hooks/useUser';
 import { Avatar, Card } from '@mui/material';
 import TerminalIcon from '@mui/icons-material/Terminal';
 import CodeIcon from '@mui/icons-material/Code';
-const interests = [
-  'JavaScript',
-  'CSS',
-  'HTML',
-  'C++',
-  'C#',
-  'Unity',
-  'Python',
-  'Java',
-  'React',
-  'Node.js',
-  'Express.js',
-  'AWS',
-];
-const hackathons = [
-  'HawkHacks',
-  'JAMHacks',
-  'Hack the North',
-  'OttawaHacks',
-  'StormHacks',
-  'ElleHacks',
-  'Cal Hacks',
-];
 
 export const Profile = () => {
   const { user, loading } = useUser();
-
-  const [selectedInterests, setSelectedInterests] = useState(
-    interests.map(() => false),
-  );
-  const [selectedHackathons, setSelectedHackathons] = useState(
-    hackathons.map(() => false),
-  );
 
   return (
     <AuthRedirect>
@@ -45,7 +15,7 @@ export const Profile = () => {
         <div className="flex flex-col gap-4 p-4">
           <Card>
             <div className="p-8">
-              <div className="flex gap-2 items-center">
+              <div className="flex gap-2 justify-center items-center mb-4">
                 <Avatar alt={user?.first_name} src={user?.github_profile_src} />{' '}
                 <p className="font-main">
                   {user?.first_name} {user?.last_name} | {user?.location}
