@@ -1,34 +1,8 @@
-import { Layout } from './Layout';
 import { useEffect, useState } from 'react';
-import AuthRedirect from '../components/auth/AuthRedirect';
-import { useUser } from '../hooks/useUser';
 import { Avatar, Card } from '@mui/material';
 import TerminalIcon from '@mui/icons-material/Terminal';
 import CodeIcon from '@mui/icons-material/Code';
 import axios from 'axios';
-const interests = [
-  'JavaScript',
-  'CSS',
-  'HTML',
-  'C++',
-  'C#',
-  'Unity',
-  'Python',
-  'Java',
-  'React',
-  'Node.js',
-  'Express.js',
-  'AWS',
-];
-const hackathons = [
-  'HawkHacks',
-  'JAMHacks',
-  'Hack the North',
-  'OttawaHacks',
-  'StormHacks',
-  'ElleHacks',
-  'Cal Hacks',
-];
 
 export const ProfileModal = (props: any) => {
   const [user, setUser] = useState<any>(null);
