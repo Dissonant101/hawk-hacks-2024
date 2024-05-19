@@ -1,7 +1,6 @@
 import {
   Avatar,
   Box,
-  Chip,
   Container,
   Modal,
   Stack,
@@ -9,19 +8,20 @@ import {
 } from '@mui/material';
 import { Layout } from './Layout';
 
-import tinderLogo from '/!tinder.svg';
 import EmptyState from '/!tinder.svg';
 import { useEffect, useState } from 'react';
 import {
-  CardEnterEvent,
   CardEvent,
   CardSwiper,
+  SwipeAction,
 } from '../components/react-card-swiper';
 import AuthRedirect from '../components/auth/AuthRedirect';
 import axios from 'axios';
+import { useUser } from '../hooks/useUser';
 import { ProfileModal } from '../components/ProfileModal';
 
 export const Home = () => {
+  const { user, loading } = useUser();
   const [users, setUsers] = useState<any[]>([]);
   const [open, setOpen] = useState(false);
   const [id, setId] = useState(0);
@@ -40,18 +40,18 @@ export const Home = () => {
           res.data.data.map((user: any) => ({
             id: user.id,
             name: user.first_name + user.last_name,
-            meta: { apk: 'some-apk-c.apk' },
+            meta: user,
             src: user.img_src,
             content: (
               <div
-                className="bg-slate-600 pt-4 pb-2 flex flex-col gap-2 justify-center items-center hover:bg-pink-400 transition"
+                className="flex flex-col items-center justify-center gap-2 pt-4 pb-2 transition bg-slate-600 hover:bg-pink-400"
                 onClick={() => {
                   console.log(user.id);
                   setId(user.id);
                   setOpen(!open);
                 }}
               >
-                <div className="flex gap-2 items-center">
+                <div className="flex items-center gap-2">
                   <Avatar alt={user.first_name} src={user.github_profile_src} />{' '}
                   <p className="font-main">
                     {user.first_name} {user.last_name} | {user.location}
@@ -62,8 +62,8 @@ export const Home = () => {
                     JSON.parse(user.languages).map((language: any, i: any) => {
                       if (i <= 4) {
                         return (
-                          <button className="px-2 rounded-full border border-pink-300 active:border-pink-500 active:bg-pink-800 bg-pink-600 text-white">
-                            <p className="font-main text-xs">{language}</p>
+                          <button className="px-2 text-white bg-pink-600 border border-pink-300 rounded-full active:border-pink-500 active:bg-pink-800">
+                            <p className="text-xs font-main">{language}</p>
                           </button>
                         );
                       } else {
@@ -76,8 +76,8 @@ export const Home = () => {
                     JSON.parse(user.hackathons).map((language: any, i: any) => {
                       if (i <= 4) {
                         return (
-                          <button className="px-2 rounded-full border border-pink-300 active:border-pink-500 active:bg-pink-800 text-white">
-                            <p className="font-main text-xs">{language}</p>
+                          <button className="px-2 text-white border border-pink-300 rounded-full active:border-pink-500 active:bg-pink-800">
+                            <p className="text-xs font-main">{language}</p>
                           </button>
                         );
                       } else {
@@ -94,16 +94,32 @@ export const Home = () => {
   }, []);
 
   const handleDismiss: CardEvent = (el, meta, id, action, operation) => {
-    // if (action === SwipeAction.LIKE)
-    console.log({ el, meta, id, action, operation }); // event data to be handled
+    // Create new invite
+    console.log({ user });
+
+    if (action === SwipeAction.LIKE) {
+      axios
+        .post(
+          'https://us-east-2.aws.neurelo.com/rest/invites/__one',
+          {
+            team_id: user.team_id,
+            recipient_id: (meta as any).id,
+          },
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'X-API-KEY': import.meta.env.VITE_NEURELO_X_API_KEY,
+            },
+          },
+        )
+        .then(console.log);
+
+      console.log({ el, meta, id, action, operation }); // event data to be handled
+    }
   };
 
   const handleFinish = (status: string) => {
     console.log(status); // 'finished'
-  };
-
-  const handleEnter: CardEnterEvent = (el, meta, id) => {
-    console.log(el, meta, id);
   };
 
   return (
@@ -111,7 +127,7 @@ export const Home = () => {
       <Modal open={open} onClose={() => setOpen(!open)}>
         <Container
           maxWidth="sm"
-          className="flex flex-col justify-center items-center"
+          className="flex flex-col items-center justify-center"
         >
           <ProfileModal id={id} />
         </Container>
@@ -128,7 +144,6 @@ export const Home = () => {
           >
             <CardSwiper
               data={users}
-              onEnter={handleEnter}
               onFinish={handleFinish}
               onDismiss={handleDismiss}
               withRibbons
@@ -149,7 +164,7 @@ export const Home = () => {
                 >
                   <Box component={'img'} width={250} src={EmptyState} />
                   <Typography variant={'subtitle2'}>
-                    You've reached the <br /> end of the list 😱
+                    You've reached the <br /> end of the list!
                   </Typography>
                 </Stack>
               }

@@ -98,6 +98,20 @@ export const InviteViewer = () => {
         },
       )
       .then(console.log);
+    setAccepted(true);
+    await axios.delete(
+      'https://us-east-2.aws.neurelo.com/rest/invites',
+
+      {
+        headers: {
+          'X-API-KEY': import.meta.env.VITE_NEURELO_X_API_KEY,
+          'Content-Type': 'application/json',
+        },
+        params: {
+          filter: JSON.stringify({ recipient_id: user.id, team_id }),
+        },
+      },
+    );
   }
 
   return (

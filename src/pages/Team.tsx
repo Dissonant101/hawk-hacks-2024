@@ -34,9 +34,9 @@ export const Team = () => {
             'Content-Type': 'application/json',
           },
           params: {
-            filter: {
+            filter: JSON.stringify({
               team_id: user.team_id,
-            },
+            }),
           },
         })
         .then((res) => {
@@ -136,7 +136,7 @@ export const Team = () => {
                     'https://us-east-2.aws.neurelo.com/rest/messages/__one',
                     {
                       sender_id: user.id,
-                      team_id: user.teamId,
+                      team_id: user.team_id,
                       content: innerHtml,
                     },
                     {
