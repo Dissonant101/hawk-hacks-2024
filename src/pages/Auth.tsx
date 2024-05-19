@@ -17,8 +17,6 @@ export function Auth() {
   );
   const [file, setFile] = useState<any>(null);
 
-  console.log(import.meta.env);
-
   useEffect(() => {
     if (auth.isLoggedIn) {
       if (phase === 'form') {
