@@ -13,9 +13,10 @@ const Team = ({
   return (
     <div className="flex items-center justify-between w-full">
       <div className="flex -space-x-6">
-        {users.map((user) => (
+        {users.map((u) => (
           <img
-            src={user.github_profile_src as string}
+            key={u.id}
+            src={u.github_profile_src as string}
             className="rounded-full shadow-sm shadow-gray-600 size-12"
           />
         ))}

@@ -14,6 +14,7 @@ import AuthRedirect from '../components/auth/AuthRedirect';
 import axios from 'axios';
 import { useUser } from '../hooks/useUser.tsx';
 import { InviteViewer } from '../components/InviteViewer.tsx';
+import { useTeam } from '../hooks/useTeam.tsx';
 
 export const Team = () => {
   const [messages, setMessages] = useState<any[]>([]);
@@ -22,6 +23,7 @@ export const Team = () => {
 
   // const [invites, setInvites] = useState<string[]>([]);
   const { user, loading } = useUser();
+  const { team, setTeam, teamLoading } = useTeam({ user, loading });
 
   useEffect(() => {
     if (loading) return;
@@ -84,7 +86,18 @@ export const Team = () => {
                         changeInvitesStatus(false);
                       }}
                     >
-                      Team Management
+                      {!teamLoading ? (
+                        <div className="inline-flex mr-2 -space-x-1 ">
+                          {team.map((u) => (
+                            <img
+                              key={u.id}
+                              src={u.github_profile_src as string}
+                              className="rounded-full shadow-sm shadow-gray-600 size-4"
+                            />
+                          ))}
+                        </div>
+                      ) : undefined}
+                      Team Management &gt;
                     </button>
                     <button
                       onClick={() => {
