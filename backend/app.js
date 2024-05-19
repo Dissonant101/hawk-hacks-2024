@@ -2,15 +2,15 @@
 import express from 'express';
 import githubUsername from 'github-username';
 import cors from 'cors';
-import { FRONTEND_URL } from '../src/constant';
 
 // Create an instance of the express application
 const app = express();
 
 app.use(cors());
+app.use(express.json());
 
 var corsOptions = {
-  origin: FRONTEND_URL,
+  origin: 'http://localhost:5173',
   optionsSuccessStatus: 200,
 };
 
@@ -26,11 +26,17 @@ app.listen(port, () => {
 app.post('/github', cors(corsOptions), (req, res) => {
   // Send the posts array as a JSON response
 
-  console.log(req);
-
   async function fetchGithub() {
-    const v = await githubUsername();
-    console.log(v);
+    const username = await githubUsername(req.body.email);
+    const userData = await fetch('https://api.github.com/users/' + username);
+    const userJSON = await userData.json();
+    const { avatar_url, name, location, bio } = userJSON;
+
+    const repoData = await fetch(
+      'https://api.github.com/users/' + username + '/repos',
+    );
+    const repoJSON = await repoData.json();
+    console.log(repoJSON);
   }
   fetchGithub();
 
