@@ -13,33 +13,61 @@ import { TeamManagement } from '../components/TeamManagement.tsx';
 import AuthRedirect from '../components/auth/AuthRedirect';
 import { SessionContext } from '../App';
 import axios from 'axios';
+import { useUser } from '../hooks/useUser.tsx';
 
 export const Team = () => {
-  const [messages, setMessages] = useState<string[]>([]);
+  const [messages, setMessages] = useState<any[]>([]);
   const [viewTeam, changeTeamStatus] = useState<boolean>(false);
   const [viewInvites, changeInvitesStatus] = useState<boolean>(false);
 
   // const [invites, setInvites] = useState<string[]>([]);
-  const auth = useContext(SessionContext) as any;
+  const { user, loading } = useUser();
+
+  useEffect(() => {
+    if (loading) return;
+
+    const interval = setInterval(() => {
+      axios
+        .get('https://us-east-2.aws.neurelo.com/rest/messages', {
+          headers: {
+            'X-API-KEY': import.meta.env.VITE_NEURELO_X_API_KEY,
+            'Content-Type': 'application/json',
+          },
+          params: {
+            filter: {
+              team_id: user.team_id,
+            },
+          },
+        })
+        .then((res) => {
+          setMessages(res.data.data);
+        });
+    }, 1000);
+    return () => {
+      clearInterval(interval);
+    };
+  }, [loading]);
 
   // useEffect(() => {
+  //   if (loading) return;
+
   //   const interval = setInterval(() => {
-  //     axios.get('http://localhost:5000').then((res) => setMessages(res.data));
+  //     axios
+  //       .get('https://us-east-2.aws.neurelo.com/rest/invites', {
+  //         headers: {
+  //           'X-API-KEY': import.meta.env.VITE_NEURELO_X_API_KEY,
+  //           'Content-Type': 'application/json',
+  //         },
+  //       })
+  //       .then((res) => {
+  //         // console.log(res.data);
+  //         // setMessages(res.data);
+  //       });
   //   }, 1000);
   //   return () => {
   //     clearInterval(interval);
   //   };
-  // });
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     const post_message = {
-  //       recipientId: auth.user.userId,
-  //     };
-  //     axios
-  //       .post('http://localhost:5000', post_message)
-  //       .then((res) => setInvites(res.data));
-  //   }, 5000);
-  // });
+  // }, [loading]);
 
   return (
     <AuthRedirect>
@@ -73,19 +101,23 @@ export const Team = () => {
                 {viewTeam ? (
                   <TeamManagement />
                 ) : (
-                  <div>
-                    {messages.map((message) => (
+                  <>
+                    {messages.map((message, i) => (
                       <Message
+                        key={i}
                         model={{
-                          message: message,
+                          message: message.content,
                           sentTime: 'just now',
                           sender: 'Joe',
-                          direction: 'incoming',
+                          direction:
+                            message.sender_id === user.id
+                              ? 'outgoing'
+                              : 'incoming',
                           position: 'first',
                         }}
                       />
                     ))}
-                  </div>
+                  </>
                 )}
               </MessageList>
               <MessageInput
@@ -98,7 +130,20 @@ export const Team = () => {
                   //   teamId: auth.user.teamId,
                   //   message: innerHtml,
                   // };
-                  // axios.post('http://localhost:5000', post_message);
+                  axios.post(
+                    'https://us-east-2.aws.neurelo.com/rest/messages/__one',
+                    {
+                      sender_id: user.id,
+                      team_id: user.teamId,
+                      content: innerHtml,
+                    },
+                    {
+                      headers: {
+                        'X-API-KEY': import.meta.env.VITE_NEURELO_X_API_KEY,
+                        'Content-Type': 'application/json',
+                      },
+                    },
+                  );
                 }}
               />
             </ChatContainer>
