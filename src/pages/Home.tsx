@@ -10,29 +10,34 @@ import {
   CardSwiper,
 } from '../components/react-card-swiper';
 import AuthRedirect from '../components/auth/AuthRedirect';
+import axios from 'axios';
 
 export const Home = () => {
   const [users, setUsers] = useState<any[]>([]);
 
   useEffect(() => {
-    // Fetch users
-    console.log('Hello');
-    setUsers([
-      {
-        id: 1,
-        name: 'Joe',
-        src: tinderLogo,
-        meta: { apk: 'some-apk-c.apk' },
-        content: <div className="h-full bg-slate-500">Hi Joe</div>,
-      },
-      {
-        id: 2,
-        name: 'Bob',
-        src: tinderLogo,
-        meta: { apk: 'some-apk-c.apk' },
-        content: <div className="h-full bg-slate-500">Hi Bob</div>,
-      },
-    ]);
+    axios
+      .get('https://us-east-2.aws.neurelo.com' + '/rest/users', {
+        headers: {
+          'Content-Type': 'application/json',
+          'X-API-KEY':
+            'neurelo_9wKFBp874Z5xFw6ZCfvhXYgW+6IrvRGB88Iaa4knlm2zOF/nakrV/jSrVszE2WKDcf6S6+ooTEHQrgYgjMWtj++yCOV/Lp7hhorR0HGRrU3zoYKG0E4LVMuqD21mEtT4d/rtJeIWQY4yEA8lYlLa6ZjekJjhcE6fbcPmEnOxjHI5QBKYyvA/JSSKTs6R+gPU_6IhO4QlrTFhy/Fn5eJ9LuEBO0SAsyevH05G8s7U1QPg=',
+        },
+      })
+      .then((res) => {
+        setUsers(
+          res.data.data.map((user: any) => ({
+            id: user.id,
+            name: user.first_name + user.last_name,
+            src: user.github_profile_src,
+            meta: { apk: 'some-apk-c.apk' },
+            content: (
+              <div className="h-full bg-slate-500">Hi {user.first_name}</div>
+            ),
+          })),
+        );
+        console.log(res.data.data);
+      });
   }, []);
 
   const handleDismiss: CardEvent = (el, meta, id, action, operation) => {
