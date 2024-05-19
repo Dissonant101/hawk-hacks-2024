@@ -7,6 +7,7 @@ import {
   Message,
   MessageInput,
   ConversationHeader,
+  Avatar,
 } from '@chatscope/chat-ui-kit-react';
 import { useEffect, useState } from 'react';
 import { TeamManagement } from '../components/TeamManagement.tsx';
@@ -128,9 +129,16 @@ export const Team = () => {
                             message.sender_id === user.id
                               ? 'outgoing'
                               : 'incoming',
-                          position: 'first',
+                          position: 'single',
                         }}
-                      />
+                      >
+                        <Avatar
+                          src={
+                            team.filter((u) => u.id === message.sender_id)[0]
+                              .github_profile_src
+                          }
+                        />
+                      </Message>
                     ))}
                   </>
                 )}
