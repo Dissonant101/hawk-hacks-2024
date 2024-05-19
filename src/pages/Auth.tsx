@@ -4,6 +4,9 @@ import { useContext, useEffect, useState } from 'react';
 import { SessionContext } from '../App';
 import { BACKEND_URL } from '../constant';
 import FormCard from '../components/auth/FormCard';
+import { put } from '@vercel/blob';
+import Icons from '../components/auth/Icons';
+import { Navigate } from 'react-router-dom';
 
 export function Auth() {
   const auth = useContext(SessionContext) as any;
@@ -12,6 +15,7 @@ export function Auth() {
   const [imgUrl, setImgUrl] = useState(
     'https://cdn.facesofopensource.com/wp-content/uploads/2017/03/16181944/linustorvalds.faces22106.web_.jpg',
   );
+  const [file, setFile] = useState<any>(null);
 
   useEffect(() => {
     if (auth.isLoggedIn) {
@@ -63,15 +67,91 @@ export function Auth() {
     setPhase('image');
   }
 
+  function onChangePicture(e: any) {
+    setFile(e.currentTarget.files && e.currentTarget.files[0]);
+  }
+
+  useEffect(() => {
+    if (file) {
+      setImgUrl(URL.createObjectURL(file as Blob));
+    }
+  }, [file]);
+
+  async function onSubmitPicture() {
+    if (file) {
+      const blob = await put(file.name, file, {
+        access: 'public',
+        token: import.meta.env.VITE_BLOB_READ_WRITE_TOKEN,
+      });
+
+      const result = await fetch(
+        'https://us-east-2.aws.neurelo.com/rest/users/' + (formState as any).id,
+        {
+          method: 'PATCH',
+          headers: {
+            'X-API-KEY': import.meta.env.VITE_NEURELO_X_API_KEY as string,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            img_src: blob.url,
+          }),
+        },
+      );
+
+      setPhase('icon');
+    }
+  }
+
+  async function onIconSubmit(lan: any, int: any) {
+    const result = await fetch(
+      'https://us-east-2.aws.neurelo.com/rest/users/' + (formState as any).id,
+      {
+        method: 'PATCH',
+        headers: {
+          'X-API-KEY': import.meta.env.VITE_NEURELO_X_API_KEY as string,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          languages: JSON.stringify(lan),
+          hackathons: JSON.stringify(int),
+        }),
+      },
+    );
+
+    setPhase('out');
+  }
+
   const PhaseFunction = () => {
     if (auth.isLoggedIn) {
       if (phase === 'form') {
         return <FormCard props={formState} formSubmit={formSubmit} />;
       } else if (phase === 'image') {
         return (
+          <div className="flex flex-col items-center mt-12 gap-3">
+            <img src={imgUrl} className="h-[300px]"></img>
+            <input
+              className="mt-4"
+              type="file"
+              onChange={(e) => onChangePicture(e)}
+            />
+            <Button variant="contained" size="small" onClick={onSubmitPicture}>
+              Submit Picture
+            </Button>
+          </div>
+        );
+      } else if (phase === 'icon') {
+        return (
           <div>
-            {/* <img 
-            <input id="file-upload" type="file" /> */}
+            <Icons
+              lan={(formState as any).languages}
+              onIconSubmit={onIconSubmit}
+            />
+          </div>
+        );
+      } else {
+        return (
+          <div>
+            <Navigate to="/" replace={true} />
           </div>
         );
       }
