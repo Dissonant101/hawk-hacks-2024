@@ -25,7 +25,7 @@ export function useTeam({ user, loading }: { user: any; loading: boolean }) {
           },
           params: {
             filter: JSON.stringify({
-              team_id: user.id,
+              team_id: user.team_id,
             }),
           },
         },

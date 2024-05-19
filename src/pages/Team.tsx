@@ -8,10 +8,9 @@ import {
   MessageInput,
   ConversationHeader,
 } from '@chatscope/chat-ui-kit-react';
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { TeamManagement } from '../components/TeamManagement.tsx';
 import AuthRedirect from '../components/auth/AuthRedirect';
-import { SessionContext } from '../App';
 import axios from 'axios';
 import { useUser } from '../hooks/useUser.tsx';
 import { InviteViewer } from '../components/InviteViewer.tsx';

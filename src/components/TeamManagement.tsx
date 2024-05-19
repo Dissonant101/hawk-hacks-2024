@@ -1,5 +1,5 @@
-import { Button, Container, Divider, Popover, Typography } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { Button, Divider, Popover } from '@mui/material';
+import { useState } from 'react';
 import { useUser } from '../hooks/useUser';
 import { useTeam } from '../hooks/useTeam';
 import axios from 'axios';
@@ -25,7 +25,7 @@ const UserIcon = ({
   const id = open ? 'simple-popover' : undefined;
 
   return (
-    <>
+    <div>
       <button
         className="bg-pink-400 rounded-full size-10"
         aria-label={id}
@@ -54,13 +54,15 @@ const UserIcon = ({
           </Button>
         </div>
       </Popover>
-    </>
+    </div>
   );
 };
 
 export const TeamManagement = () => {
   const { user, loading } = useUser();
   const { team, setTeam } = useTeam({ user, loading });
+
+  console.log({ team });
 
   function onKick(team_member_id: number) {
     if (team_member_id === user.id) return;
