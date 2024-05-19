@@ -1,9 +1,6 @@
 import { Layout } from './Layout';
-import Chip from '@mui/material/Chip';
-import Stack from '@mui/material/Stack';
 import { useState } from 'react';
 import AuthRedirect from '../components/auth/AuthRedirect';
-import { Divider } from '@mui/material';
 const interests = [
   'JavaScript',
   'CSS',

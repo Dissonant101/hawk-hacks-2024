@@ -17,6 +17,7 @@ import axios from 'axios';
 export const Team = () => {
   const [messages, setMessages] = useState<string[]>([]);
   const [viewTeam, changeStatus] = useState<boolean>(false);
+  // const [invites, setInvites] = useState<string[]>([]);
   const auth = useContext(SessionContext) as any;
 
   // useEffect(() => {
@@ -26,6 +27,16 @@ export const Team = () => {
   //   return () => {
   //     clearInterval(interval);
   //   };
+  // });
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     const post_message = {
+  //       recipientId: auth.user.userId,
+  //     };
+  //     axios
+  //       .post('http://localhost:5000', post_message)
+  //       .then((res) => setInvites(res.data));
+  //   }, 5000);
   // });
 
   return (
