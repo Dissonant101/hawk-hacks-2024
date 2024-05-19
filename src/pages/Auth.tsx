@@ -47,7 +47,7 @@ export function Auth() {
     loc: string,
     bio: string,
   ) {
-    const result = await fetch(
+    await fetch(
       'https://us-east-2.aws.neurelo.com/rest/users/' + (formState as any).id,
       {
         method: 'PATCH',
@@ -85,7 +85,7 @@ export function Auth() {
         token: import.meta.env.VITE_BLOB_READ_WRITE_TOKEN,
       });
 
-      const result = await fetch(
+      await fetch(
         'https://us-east-2.aws.neurelo.com/rest/users/' + (formState as any).id,
         {
           method: 'PATCH',
@@ -101,7 +101,7 @@ export function Auth() {
 
       setPhase('icon');
     } else {
-      const result = await fetch(
+      await fetch(
         'https://us-east-2.aws.neurelo.com/rest/users/' + (formState as any).id,
         {
           method: 'PATCH',
@@ -120,7 +120,7 @@ export function Auth() {
   }
 
   async function onIconSubmit(lan: any, int: any) {
-    const result = await fetch(
+    await fetch(
       'https://us-east-2.aws.neurelo.com/rest/users/' + (formState as any).id,
       {
         method: 'PATCH',
@@ -144,7 +144,7 @@ export function Auth() {
         return <FormCard props={formState} formSubmit={formSubmit} />;
       } else if (phase === 'image') {
         return (
-          <div className="flex flex-col items-center mt-12 gap-3">
+          <div className="flex flex-col items-center gap-3 mt-12">
             <img src={imgUrl} className="h-[300px]"></img>
             <input
               className="mt-4"
