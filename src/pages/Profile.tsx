@@ -52,7 +52,9 @@ export const Profile = () => {
                 </p>
               </div>
               <p className="font-main text-center text-sm">{user?.email}</p>
-              <img src={user?.img_src} className="w-[100px] rounded-xl"></img>
+              <div className="flex justify-center py-4">
+                <img src={user?.img_src} className="w-[100px] rounded-xl"></img>
+              </div>
               <p className="text-center text-sm text-slate-500 mt-2">
                 {user?.bio}
               </p>
@@ -60,7 +62,7 @@ export const Profile = () => {
                 <CodeIcon />
                 <p className="font-main">Languages</p>
               </div>
-              <div className="flex gap-2">
+              <div className="flex gap-2 flex-wrap justify-center">
                 {user?.languages &&
                   JSON.parse(user?.languages).map((language: any, i: any) => {
                     return (
@@ -74,11 +76,11 @@ export const Profile = () => {
                 <TerminalIcon />
                 <p className="font-main">Hackathons</p>
               </div>
-              <div className="flex gap-2">
+              <div className="flex gap-2 flex-wrap justify-center">
                 {user?.hackathons &&
                   JSON.parse(user?.hackathons).map((language: any, i: any) => {
                     return (
-                      <button className="px-2 rounded-full border border-pink-300 active:border-pink-500 active:bg-pink-800 text-white">
+                      <button className="px-2 rounded-full border border-pink-300 active:border-pink-500 active:bg-pink-800 text-black">
                         <p className="font-main text-xs">{language}</p>
                       </button>
                     );

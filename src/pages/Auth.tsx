@@ -64,6 +64,7 @@ export function Auth() {
       },
     );
 
+    setImgUrl((formState as any).github_profile_src);
     setPhase('image');
   }
 
@@ -94,6 +95,22 @@ export function Auth() {
           },
           body: JSON.stringify({
             img_src: blob.url,
+          }),
+        },
+      );
+
+      setPhase('icon');
+    } else {
+      const result = await fetch(
+        'https://us-east-2.aws.neurelo.com/rest/users/' + (formState as any).id,
+        {
+          method: 'PATCH',
+          headers: {
+            'X-API-KEY': import.meta.env.VITE_NEURELO_X_API_KEY as string,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            img_src: (formState as any).github_profile_src,
           }),
         },
       );
