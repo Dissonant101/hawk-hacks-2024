@@ -2,6 +2,7 @@
 import express from 'express';
 import githubUsername from 'github-username';
 import cors from 'cors';
+import 'dotenv/config';
 
 // Create an instance of the express application
 const app = express();
@@ -36,9 +37,57 @@ app.post('/github', cors(corsOptions), (req, res) => {
       'https://api.github.com/users/' + username + '/repos',
     );
     const repoJSON = await repoData.json();
-    console.log(repoJSON);
+
+    var repoList = repoJSON.map((repo) => repo.language);
+    repoList = [...new Set(repoList)];
+    for (var i = 0; i < repoList.length; i++) {
+      if (repoList[i] === null) {
+        repoList.splice(i, 1);
+      }
+    }
+
+    const result = await fetch(
+      'https://us-east-2.aws.neurelo.com/rest/users/__one',
+      {
+        method: 'POST',
+        headers: {
+          'X-API-KEY': process.env.NEURELO_X_API_KEY,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          id: Math.floor(Math.random() * 100000000 + 100),
+          first_name: req.body.first,
+          last_name: req.body.last,
+          github_username: username,
+          github_profile_src: avatar_url,
+          location: location,
+          bio: bio,
+          languages: JSON.stringify(repoList),
+        }),
+      },
+    );
+
+    const resultData = await result.json();
+
+    return result;
+
+    // Fetch ALL Languages
+    // for (var i = 0; i < repoJSON.length; i++) {
+    //   var languages = await fetch(repoJSON[i].languages_url);
+    //   languages = await languages.json();
+    //   var keys = Object.keys(languages);
+    //   console.log(keys);
+    //   for (var j = 0; j < keys.length; j++) {
+    //     if (keys[j] in repos) {
+    //       repos[keys[j]] += languages[keys[j]];
+    //     } else {
+    //       repos[keys[j]] = languages[keys[j]];
+    //     }
+    //   }
+    //   repoList.push(languages);
+    // }
   }
   fetchGithub();
 
-  res.status(200).json({ hello: 'word' });
+  res.status(200).json({ test: 'test' });
 });

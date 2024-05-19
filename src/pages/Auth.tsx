@@ -19,7 +19,11 @@ export function Auth() {
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ email: auth.user.email }),
+            body: JSON.stringify({
+              email: auth.user.email,
+              first: auth.user.firstName,
+              last: auth.user.lastName,
+            }),
           });
         }, []);
 
