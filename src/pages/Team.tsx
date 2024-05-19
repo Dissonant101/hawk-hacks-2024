@@ -7,7 +7,7 @@ import {
   Message,
   MessageInput,
   ConversationHeader,
-  Avatar,
+  // Avatar,
 } from '@chatscope/chat-ui-kit-react';
 import { useEffect, useState } from 'react';
 import { TeamManagement } from '../components/TeamManagement.tsx';
