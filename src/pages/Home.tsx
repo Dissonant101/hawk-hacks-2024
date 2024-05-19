@@ -25,6 +25,7 @@ export const Home = () => {
   const { user, loading } = useUser();
   const { team, teamLoading } = useTeam({ user, loading });
   const [users, setUsers] = useState<any[]>([]);
+  const [noUsers, setNoUsers] = useState<boolean>(false);
   const [open, setOpen] = useState(false);
   const [id, setId] = useState(0);
 
@@ -38,61 +39,64 @@ export const Home = () => {
         },
       })
       .then((res) => {
-        setUsers(
-          res.data.data
-            .filter((u: any) => !team.some((t) => t.id === u.id))
-            .map((u: any) => ({
-              id: u.id,
-              name: u.first_name + ' ' + u.last_name,
-              meta: u,
-              src: u.img_src,
-              content: (
-                <div
-                  className="flex flex-col items-center justify-center gap-2 pt-4 pb-2 transition bg-slate-600 hover:bg-pink-400"
-                  onClick={() => {
-                    console.log(u.id);
-                    setId(u.id);
-                    setOpen(!open);
-                  }}
-                >
-                  <div className="flex items-center gap-2">
-                    <Avatar alt={u.first_name} src={u.github_profile_src} />{' '}
-                    <p className="font-main">
-                      {u.first_name} {u.last_name} | {u.location}
-                    </p>
-                  </div>
-                  <div className="flex gap-2">
-                    {u.languages &&
-                      JSON.parse(u.languages).map(
-                        (language: any, i: any) =>
-                          i <= 4 && (
-                            <button
-                              key={i}
-                              className="px-2 text-white bg-pink-600 border border-pink-300 rounded-full active:border-pink-500 active:bg-pink-800"
-                            >
-                              <p className="text-xs font-main">{language}</p>
-                            </button>
-                          ),
-                      )}
-                  </div>
-                  <div className="flex gap-2">
-                    {u.hackathons &&
-                      JSON.parse(u.hackathons).map((language: any, i: any) => {
-                        if (i <= 4) {
-                          return (
-                            <button className="px-2 text-white border border-pink-300 rounded-full active:border-pink-500 active:bg-pink-800">
-                              <p className="text-xs font-main">{language}</p>
-                            </button>
-                          );
-                        } else {
-                          return null;
-                        }
-                      })}
-                  </div>
+        const filteredUsers = res.data.data
+          .filter((u: any) => !team.some((t) => t.id === u.id))
+          .map((u: any) => ({
+            id: u.id,
+            name: u.first_name + ' ' + u.last_name,
+            meta: u,
+            src: u.img_src,
+            content: (
+              <div
+                className="flex flex-col items-center justify-center gap-2 pt-4 pb-2 transition bg-slate-600 hover:bg-pink-400"
+                onClick={() => {
+                  console.log(u.id);
+                  setId(u.id);
+                  setOpen(!open);
+                }}
+              >
+                <div className="flex items-center gap-2">
+                  <Avatar alt={u.first_name} src={u.github_profile_src} />{' '}
+                  <p className="font-main">
+                    {u.first_name} {u.last_name} | {u.location}
+                  </p>
                 </div>
-              ),
-            })),
-        );
+                <div className="flex gap-2">
+                  {u.languages &&
+                    JSON.parse(u.languages).map(
+                      (language: any, i: any) =>
+                        i <= 4 && (
+                          <button
+                            key={i}
+                            className="px-2 text-white bg-pink-600 border border-pink-300 rounded-full active:border-pink-500 active:bg-pink-800"
+                          >
+                            <p className="text-xs font-main">{language}</p>
+                          </button>
+                        ),
+                    )}
+                </div>
+                <div className="flex gap-2">
+                  {u.hackathons &&
+                    JSON.parse(u.hackathons).map((language: any, i: any) => {
+                      if (i <= 4) {
+                        return (
+                          <button className="px-2 text-white border border-pink-300 rounded-full active:border-pink-500 active:bg-pink-800">
+                            <p className="text-xs font-main">{language}</p>
+                          </button>
+                        );
+                      } else {
+                        return null;
+                      }
+                    })}
+                </div>
+              </div>
+            ),
+          }));
+        if (filteredUsers.length > 0) {
+          setUsers(filteredUsers);
+        } else {
+          setNoUsers(true);
+        }
         console.log(res.data.data);
       });
   }, [loading, teamLoading]);
@@ -134,7 +138,7 @@ export const Home = () => {
         </Container>
       </Modal>
       <Layout>
-        {users.length && (
+        {(users.length || noUsers) && (
           <Stack
             height={'100%'}
             width={'100%'}
@@ -165,7 +169,7 @@ export const Home = () => {
                 >
                   <Box component={'img'} width={250} src={EmptyState} />
                   <Typography variant={'subtitle2'}>
-                    You've reached the <br /> end of the list!
+                    Seems like everyone has found a match!
                   </Typography>
                 </Stack>
               }
