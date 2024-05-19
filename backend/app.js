@@ -29,7 +29,25 @@ app.get('/', (req, res) => {
 
 // Create a route and a handler for GET /githubemail
 app.post('/github', cors(corsOptions), async (req, res) => {
-  // Send the posts array as a JSON response
+  // Check if the email is already in the database
+  // If it is, then we don't need to do anything
+  const existing = await fetch(
+    'https://us-east-2.aws.neurelo.com/rest/users?' +
+      new URLSearchParams({
+        filter: JSON.stringify({ email: req.body.email }),
+      }),
+    {
+      headers: {
+        'X-API-KEY': process.env.NEURELO_X_API_KEY,
+        'Content-Type': 'application/json',
+      },
+    },
+  ).then((res) => res.json());
+  if (existing.data.length > 0) {
+    // console.log('ALready exists');
+    res.status(200).json(existing.data[0]);
+    return;
+  }
 
   const username = await githubUsername(req.body.email);
   const userData = await fetch('https://api.github.com/users/' + username);
@@ -71,8 +89,18 @@ app.post('/github', cors(corsOptions), async (req, res) => {
       }),
     },
   );
-
   const resultData = await result.json();
+  // Set team_id to be user.id
+  await fetch('https://us-east-2.aws.neurelo.com/rest/users/' + resultData.id, {
+    method: 'PATCH',
+    headers: {
+      'X-API-KEY': process.env.NEURELO_X_API_KEY,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      team_id: resultData.data.id,
+    }),
+  });
 
   console.log(resultData);
 
