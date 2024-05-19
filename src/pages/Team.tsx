@@ -23,7 +23,7 @@ export const Team = () => {
 
   // const [invites, setInvites] = useState<string[]>([]);
   const { user, loading } = useUser();
-  const { team, setTeam, teamLoading } = useTeam({ user, loading });
+  const { team, teamLoading } = useTeam({ user, loading });
 
   useEffect(() => {
     if (loading) return;
