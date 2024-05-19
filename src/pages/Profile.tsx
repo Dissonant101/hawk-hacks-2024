@@ -40,9 +40,19 @@ export const Profile = () => {
     <AuthRedirect>
       <Layout>
         <div className="flex flex-col gap-4 p-4">
-          <div className="bg-pink-600 p-4 rounded-xl">
+          <button
+            className="bg-pink-600 p-4 rounded-xl focus:opacity-50"
+            onClick={() => {
+              interests.map((current_item, i) => {
+                selectedInterests[i] ? console.log(current_item) : false;
+              });
+              hackathons.map((current_item, i) => {
+                selectedHackathons[i] ? console.log(current_item) : false;
+              });
+            }}
+          >
             <p className="bg-center flex justify-center">Create your profile</p>
-          </div>
+          </button>
           <div className="bg-black p-8 rounded-xl">
             <p className="text-white pt-0 pb-4">Programming Interests</p>
             <div className="flex flex-wrap gap-2">
@@ -65,7 +75,6 @@ export const Profile = () => {
                 </button>
               ))}
             </div>
-            <Divider />
             <p className="text-white py-4">Hackathons Attended</p>
             <div className="flex flex-wrap gap-2">
               {hackathons.map((_, i) => (
