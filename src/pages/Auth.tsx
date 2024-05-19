@@ -7,7 +7,7 @@ import FormCard from '../components/auth/FormCard';
 
 export function Auth() {
   const auth = useContext(SessionContext) as any;
-  const [phase, setPhase] = useState('');
+  const [phase, setPhase] = useState('form');
   const [formState, setFormState] = useState(null);
   const [imgUrl, setImgUrl] = useState(
     'https://cdn.facesofopensource.com/wp-content/uploads/2017/03/16181944/linustorvalds.faces22106.web_.jpg',
@@ -29,6 +29,7 @@ export function Auth() {
             }),
           });
           const resultJSON = await result.json();
+
           setFormState(resultJSON);
         }
         backendFetch();
@@ -94,7 +95,7 @@ export function Auth() {
   };
 
   return (
-    <div className="gradient-animation h-screen">
+    <div className="h-screen gradient-animation">
       <Container maxWidth="sm">
         <div className="flex flex-col items-center justify-center">
           <div className="flex pt-16">
@@ -102,7 +103,7 @@ export function Auth() {
               src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/TinderIcon-2017.svg/1200px-TinderIcon-2017.svg.png"
               className="h-16 pr-4"
             ></img>
-            <p className="text-6xl font-sans font-main text-white font-extrabold">
+            <p className="font-sans text-6xl font-extrabold text-white font-main">
               !Tinder
             </p>
           </div>
