@@ -93,7 +93,7 @@
 
 .swipe-card__image-container {
   position: relative;
-  height: 250px;
+  height: 100%;
 }
 
 .swipe-card__image {

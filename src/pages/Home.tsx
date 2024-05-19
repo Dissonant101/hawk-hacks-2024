@@ -32,7 +32,9 @@ export const Home = () => {
             src: user.github_profile_src,
             meta: { apk: 'some-apk-c.apk' },
             content: (
-              <div className="h-full bg-slate-500">Hi {user.first_name}</div>
+              <div className="h-full p-2 bg-slate-500">
+                {user.first_name} {user.last_name} | {user.location}
+              </div>
             ),
           })),
         );
