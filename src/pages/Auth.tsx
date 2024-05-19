@@ -1,20 +1,23 @@
-import { Container } from '@mui/material';
+import { Button, Container } from '@mui/material';
 import { LoginButton, SigninButton } from '../components/auth/AuthComponents';
 import { useContext, useEffect, useState } from 'react';
 import { SessionContext } from '../App';
 import { BACKEND_URL } from '../constant';
+import FormCard from '../components/auth/FormCard';
 
 export function Auth() {
   const auth = useContext(SessionContext) as any;
-  const [phase, setPhase] = useState('skills');
+  const [phase, setPhase] = useState('');
+  const [formState, setFormState] = useState(null);
+  const [imgUrl, setImgUrl] = useState(
+    'https://cdn.facesofopensource.com/wp-content/uploads/2017/03/16181944/linustorvalds.faces22106.web_.jpg',
+  );
 
-  console.log(JSON.stringify(auth));
-
-  function phaseFunction() {
+  useEffect(() => {
     if (auth.isLoggedIn) {
-      if (phase === 'skills') {
-        useEffect(() => {
-          fetch(BACKEND_URL + '/github', {
+      if (phase === 'form') {
+        async function backendFetch() {
+          const result = await fetch(BACKEND_URL + '/github', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -25,9 +28,51 @@ export function Auth() {
               last: auth.user.lastName,
             }),
           });
-        }, []);
+          const resultJSON = await result.json();
+          setFormState(resultJSON);
+        }
+        backendFetch();
+      }
+    }
+  }, [phase]);
 
-        return <div>Skills</div>;
+  async function formSubmit(
+    first: string,
+    last: string,
+    loc: string,
+    bio: string,
+  ) {
+    const result = await fetch(
+      'https://us-east-2.aws.neurelo.com/rest/users/' + (formState as any).id,
+      {
+        method: 'PATCH',
+        headers: {
+          'X-API-KEY': import.meta.env.VITE_NEURELO_X_API_KEY as string,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          first_name: first,
+          last_name: last,
+          location: loc,
+          bio: bio,
+        }),
+      },
+    );
+
+    setPhase('image');
+  }
+
+  const PhaseFunction = () => {
+    if (auth.isLoggedIn) {
+      if (phase === 'form') {
+        return <FormCard props={formState} formSubmit={formSubmit} />;
+      } else if (phase === 'image') {
+        return (
+          <div>
+            {/* <img 
+            <input id="file-upload" type="file" /> */}
+          </div>
+        );
       }
     } else {
       return (
@@ -46,11 +91,11 @@ export function Auth() {
         </div>
       );
     }
-  }
+  };
 
   return (
     <div className="gradient-animation h-screen">
-      <Container>
+      <Container maxWidth="sm">
         <div className="flex flex-col items-center justify-center">
           <div className="flex pt-16">
             <img
@@ -62,7 +107,7 @@ export function Auth() {
             </p>
           </div>
         </div>
-        {phaseFunction()}
+        <PhaseFunction />
       </Container>
     </div>
   );

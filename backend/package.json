@@ -17,7 +17,6 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
-    "github-username": "^8.0.0",
-    "uuid": "^9.0.1"
+    "github-username": "^8.0.0"
   }
 }
