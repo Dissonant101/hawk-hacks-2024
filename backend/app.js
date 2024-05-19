@@ -23,6 +23,10 @@ app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
 
+app.get('/', (req, res) => {
+  res.send('Express on Vercel');
+});
+
 // Create a route and a handler for GET /githubemail
 app.post('/github', cors(corsOptions), async (req, res) => {
   // Send the posts array as a JSON response
