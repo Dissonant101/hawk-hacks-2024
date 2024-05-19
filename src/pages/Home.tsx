@@ -1,48 +1,42 @@
 import { Box, Stack, Typography } from '@mui/material';
 import { Layout } from './Layout';
+
+import tinderLogo from '/!tinder.svg';
+import EmptyState from '/!tinder.svg';
+import { useEffect, useState } from 'react';
 import {
-  CardData,
   CardEnterEvent,
   CardEvent,
   CardSwiper,
-} from 'react-card-swiper';
-
-import bubbleShooter from '/!tinder.svg';
-import candyCrash from '/!tinder.svg';
-import clashRoyal from '/!tinder.svg';
-import EmptyState from '/!tinder.svg';
+} from '../components/react-card-swiper';
 import AuthRedirect from '../components/auth/AuthRedirect';
-import { Link } from 'react-router-dom';
-
-const Content = () => (
-  <Typography px={2} variant="h6">
-    Lorem ipsum dolor sit amet.
-  </Typography>
-);
-
-const mockData: CardData[] = [
-  {
-    id: '88552078',
-    meta: { apk: 'some-apk-a.apk' },
-    src: bubbleShooter,
-    content: <Content />,
-  },
-  {
-    id: 'fc7e0bd4',
-    meta: { apk: 'some-apk-b.apk' },
-    src: candyCrash,
-    content: <Content />,
-  },
-  {
-    id: 'da9a7067',
-    meta: { apk: 'some-apk-c.apk' },
-    src: clashRoyal,
-    content: <Content />,
-  },
-];
 
 export const Home = () => {
+  const [users, setUsers] = useState<any[]>([]);
+
+  useEffect(() => {
+    // Fetch users
+    console.log('Hello');
+    setUsers([
+      {
+        id: 1,
+        name: 'Joe',
+        src: tinderLogo,
+        meta: { apk: 'some-apk-c.apk' },
+        content: <div className="h-full bg-slate-500">Hi Joe</div>,
+      },
+      {
+        id: 2,
+        name: 'Bob',
+        src: tinderLogo,
+        meta: { apk: 'some-apk-c.apk' },
+        content: <div className="h-full bg-slate-500">Hi Bob</div>,
+      },
+    ]);
+  }, []);
+
   const handleDismiss: CardEvent = (el, meta, id, action, operation) => {
+    // if (action === SwipeAction.LIKE)
     console.log({ el, meta, id, action, operation }); // event data to be handled
   };
 
@@ -57,46 +51,45 @@ export const Home = () => {
   return (
     <AuthRedirect>
       <Layout>
-        <Stack
-          height={'100%'}
-          width={'100%'}
-          direction="column"
-          alignItems="center"
-          justifyContent={'end'}
-          p={2}
-        >
-          <CardSwiper
-            data={mockData}
-            onEnter={handleEnter}
-            onFinish={handleFinish}
-            onDismiss={handleDismiss}
-            dislikeButton={<div>Left</div>}
-            likeButton={<div>Right</div>}
-            withActionButtons
-            withRibbons
-            likeRibbonText="INSTALL"
-            dislikeRibbonText="PASS"
-            ribbonColors={{
-              bgLike: 'green',
-              bgDislike: 'red',
-              textColor: 'white',
-            }}
-            emptyState={
-              <Stack
-                direction={'column'}
-                alignItems={'center'}
-                justifyContent={'center'}
-                textAlign={'center'}
-                gap={2}
-              >
-                <Box component={'img'} width={250} src={EmptyState} />
-                <Typography variant={'subtitle2'}>
-                  You've reached the <br /> end of the list
-                </Typography>
-              </Stack>
-            }
-          />
-        </Stack>
+        {users.length && (
+          <Stack
+            height={'100%'}
+            width={'100%'}
+            direction="column"
+            alignItems="center"
+            justifyContent={'end'}
+            p={2}
+          >
+            <CardSwiper
+              data={users}
+              onEnter={handleEnter}
+              onFinish={handleFinish}
+              onDismiss={handleDismiss}
+              withRibbons
+              likeRibbonText="LIKE"
+              dislikeRibbonText="NOPE"
+              ribbonColors={{
+                bgLike: 'green',
+                bgDislike: 'red',
+                textColor: 'white',
+              }}
+              emptyState={
+                <Stack
+                  direction={'column'}
+                  alignItems={'center'}
+                  justifyContent={'center'}
+                  textAlign={'center'}
+                  gap={2}
+                >
+                  <Box component={'img'} width={250} src={EmptyState} />
+                  <Typography variant={'subtitle2'}>
+                    You've reached the <br /> end of the list 😱
+                  </Typography>
+                </Stack>
+              }
+            />
+          </Stack>
+        )}
       </Layout>
     </AuthRedirect>
   );
