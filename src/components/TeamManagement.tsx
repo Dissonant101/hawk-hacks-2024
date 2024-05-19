@@ -1,5 +1,8 @@
 import { Button, Container, Divider, Popover, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
+import { useUser } from '../hooks/useUser';
+import { useTeam } from '../hooks/useTeam';
+import axios from 'axios';
 
 const UserIcon = ({
   user,
@@ -56,25 +59,34 @@ const UserIcon = ({
 };
 
 export const TeamManagement = () => {
-  // If not logged in, redirect
+  const { user, loading } = useUser();
+  const { team, setTeam } = useTeam({ user, loading });
 
-  const [teamMembers, setTeamMembers] = useState<any[]>([]);
+  function onKick(team_member_id: number) {
+    if (team_member_id === user.id) return;
 
-  useEffect(() => {
-    // Fetch team members
-    setTeamMembers([
-      { id: 1, name: 'Joe' },
-      { id: 2, name: 'Bob' },
-    ]);
-  }, []);
-
-  function onKick(_: number) {}
+    // Kick the user from the team
+    axios
+      .patch(
+        'https://us-east-2.aws.neurelo.com/rest/users/' + team_member_id,
+        { team_id: team_member_id },
+        {
+          headers: {
+            'X-API-KEY': import.meta.env.VITE_NEURELO_X_API_KEY,
+            'Content-Type': 'application/json',
+          },
+        },
+      )
+      .then(() => {
+        setTeam(team.filter((u) => u.id !== team_member_id));
+      });
+  }
 
   return (
     <div className="p-4">
       <div className="flex justify-start gap-4 p-4">
-        {teamMembers.map((u) => (
-          <UserIcon user={u} onKick={onKick} key={u.id} />
+        {team.map((u) => (
+          <UserIcon user={u} onKick={() => onKick(u.id)} key={u.id} />
         ))}
       </div>
       <Divider />

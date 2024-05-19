@@ -14,6 +14,7 @@ import AuthRedirect from '../components/auth/AuthRedirect';
 import { SessionContext } from '../App';
 import axios from 'axios';
 import { useUser } from '../hooks/useUser.tsx';
+import { InviteViewer } from '../components/InviteViewer.tsx';
 
 export const Team = () => {
   const [messages, setMessages] = useState<any[]>([]);
@@ -100,6 +101,8 @@ export const Team = () => {
               <MessageList>
                 {viewTeam ? (
                   <TeamManagement />
+                ) : viewInvites ? (
+                  <InviteViewer />
                 ) : (
                   <>
                     {messages.map((message, i) => (

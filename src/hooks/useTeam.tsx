@@ -37,5 +37,5 @@ export function useTeam({ user, loading }: { user: any; loading: boolean }) {
     })();
   }, [loading]);
 
-  return { team, teamLoading };
+  return { team, setTeam, teamLoading };
 }
