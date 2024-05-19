@@ -3,6 +3,7 @@ import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
 import { useState } from 'react';
 import AuthRedirect from '../components/auth/AuthRedirect';
+import { Divider } from '@mui/material';
 const interests = [
   'JavaScript',
   'CSS',
@@ -38,38 +39,47 @@ export const Profile = () => {
   return (
     <AuthRedirect>
       <Layout>
-        <Stack direction="row" spacing={3}>
-          <div>
-            Programming Interests
-            {interests.map((interest, i) => (
-              <Chip
-                label={interest}
+        <div className="flex flex-col gap-4 p-4">
+          <p>Programming Interests</p>
+          <div className="flex flex-wrap gap-2">
+            {selectedInterests.map((_, i) => (
+              <button
+                className={
+                  'px-2 rounded-full border border-pink-300 active:border-pink-500 active:bg-pink-800 ' +
+                  (selectedInterests[i] ? 'bg-pink-600' : '')
+                }
+                key={i}
                 onClick={() => {
                   const newSelectedInterests = [...selectedInterests];
-                  // modify new
                   newSelectedInterests[i] = !newSelectedInterests[i];
                   setSelectedInterests(newSelectedInterests);
                 }}
-              />
+              >
+                {interests[i]}
+              </button>
             ))}
           </div>
-        </Stack>
-        <Stack direction="row" spacing={3}>
-          <div>
-            Hackathons Attended
-            {hackathons.map((hackathon, i) => (
-              <Chip
-                label={hackathon}
+          <Divider />
+          <p>Hackathons Attended</p>
+          <div className="flex flex-wrap gap-2">
+            {hackathons.map((_, i) => (
+              <button
+                className={
+                  'px-2 rounded-full border border-pink-300 active:border-pink-500 active:bg-pink-800 ' +
+                  (selectedHackathons[i] ? 'bg-pink-600' : '')
+                }
+                key={i}
                 onClick={() => {
                   const newSelectedHackathons = [...selectedHackathons];
-                  // modify new
                   newSelectedHackathons[i] = !newSelectedHackathons[i];
                   setSelectedHackathons(newSelectedHackathons);
                 }}
-              />
+              >
+                {interests[i]}
+              </button>
             ))}
           </div>
-        </Stack>
+        </div>
       </Layout>
     </AuthRedirect>
   );
