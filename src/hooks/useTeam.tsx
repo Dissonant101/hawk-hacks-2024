@@ -8,13 +8,13 @@ export interface User {
   email: string;
 }
 
-export function useUser() {
-  const [user, setUser] = useState<any>(undefined);
-  const [loading, setLoading] = useState<boolean>(true);
-
-  const auth = useContext(SessionContext) as any;
+export function useTeam({ user, loading }: { user: any; loading: boolean }) {
+  const [team, setTeam] = useState<any[]>([]);
+  const [teamLoading, setTeamLoading] = useState<boolean>(true);
 
   useEffect(() => {
+    if (loading) return;
+
     (async () => {
       const res = await axios.get(
         'https://us-east-2.aws.neurelo.com/rest/users',
@@ -25,17 +25,17 @@ export function useUser() {
           },
           params: {
             filter: JSON.stringify({
-              email: auth.user.email,
+              team_id: user.id,
             }),
           },
         },
       );
       // console.log({ res });
 
-      setUser(res.data.data[0]);
-      setLoading(false);
+      setTeam(res.data.data);
+      setTeamLoading(false);
     })();
-  }, []);
+  }, [loading]);
 
-  return { user, loading };
+  return { team, teamLoading };
 }
