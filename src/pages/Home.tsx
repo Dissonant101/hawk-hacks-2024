@@ -40,17 +40,18 @@ export const Home = () => {
                   </p>
                 </div>
                 <div className="flex gap-2">
-                  {JSON.parse(user.languages).map((language: any, i: any) => {
-                    if (i <= 4) {
-                      return (
-                        <button className="px-2 rounded-full border border-pink-300 active:border-pink-500 active:bg-pink-800 bg-pink-600 text-white">
-                          <p className="font-main text-xs">{language}</p>
-                        </button>
-                      );
-                    } else {
-                      return null;
-                    }
-                  })}
+                  {user.languages &&
+                    JSON.parse(user.languages).map((language: any, i: any) => {
+                      if (i <= 4) {
+                        return (
+                          <button className="px-2 rounded-full border border-pink-300 active:border-pink-500 active:bg-pink-800 bg-pink-600 text-white">
+                            <p className="font-main text-xs">{language}</p>
+                          </button>
+                        );
+                      } else {
+                        return null;
+                      }
+                    })}
                 </div>
                 <div className="flex gap-2">
                   {user.hackathons &&
