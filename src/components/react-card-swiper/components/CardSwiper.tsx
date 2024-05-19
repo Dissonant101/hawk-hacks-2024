@@ -73,7 +73,7 @@ export const CardSwiper = (props: CardSwiperProps) => {
               ribbonColors={props.ribbonColors}
             />
           )}
-
+          {content && <div className="swipe-card__content grow">{content}</div>}
           <div className="swipe-card__image-container">
             <img
               className="swipe-card__image"
@@ -82,7 +82,6 @@ export const CardSwiper = (props: CardSwiperProps) => {
               id="swipe-card__image"
             />
           </div>
-          {content && <div className="swipe-card__content grow">{content}</div>}
         </div>
       )),
     [],

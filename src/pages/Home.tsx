@@ -1,4 +1,4 @@
-import { Box, Stack, Typography } from '@mui/material';
+import { Avatar, Box, Chip, Stack, Typography } from '@mui/material';
 import { Layout } from './Layout';
 
 import tinderLogo from '/!tinder.svg';
@@ -29,11 +29,43 @@ export const Home = () => {
           res.data.data.map((user: any) => ({
             id: user.id,
             name: user.first_name + user.last_name,
-            src: user.github_profile_src,
             meta: { apk: 'some-apk-c.apk' },
+            src: user.img_src,
             content: (
-              <div className="h-full p-2 bg-slate-500">
-                {user.first_name} {user.last_name} | {user.location}
+              <div className="bg-slate-600 pt-4 pb-2 flex flex-col gap-2 justify-center items-center">
+                <div className="flex gap-2 items-center">
+                  <Avatar alt={user.first_name} src={user.github_profile_src} />{' '}
+                  <p className="font-main">
+                    {user.first_name} {user.last_name} | {user.location}
+                  </p>
+                </div>
+                <div className="flex gap-2">
+                  {JSON.parse(user.languages).map((language: any, i: any) => {
+                    if (i <= 4) {
+                      return (
+                        <button className="px-2 rounded-full border border-pink-300 active:border-pink-500 active:bg-pink-800 bg-pink-600 text-white">
+                          <p className="font-main text-xs">{language}</p>
+                        </button>
+                      );
+                    } else {
+                      return null;
+                    }
+                  })}
+                </div>
+                <div className="flex gap-2">
+                  {user.hackathons &&
+                    JSON.parse(user.hackathons).map((language: any, i: any) => {
+                      if (i <= 4) {
+                        return (
+                          <button className="px-2 rounded-full border border-pink-300 active:border-pink-500 active:bg-pink-800 text-white">
+                            <p className="font-main text-xs">{language}</p>
+                          </button>
+                        );
+                      } else {
+                        return null;
+                      }
+                    })}
+                </div>
               </div>
             ),
           })),
