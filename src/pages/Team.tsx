@@ -16,7 +16,9 @@ import axios from 'axios';
 
 export const Team = () => {
   const [messages, setMessages] = useState<string[]>([]);
-  const [viewTeam, changeStatus] = useState<boolean>(false);
+  const [viewTeam, changeTeamStatus] = useState<boolean>(false);
+  const [viewInvites, changeInvitesStatus] = useState<boolean>(false);
+
   // const [invites, setInvites] = useState<string[]>([]);
   const auth = useContext(SessionContext) as any;
 
@@ -47,22 +49,24 @@ export const Team = () => {
             <ChatContainer>
               <ConversationHeader>
                 <ConversationHeader.Content>
-                  <span
-                    style={{
-                      alignSelf: 'flex-center',
-                      color: '#ec1212',
-                    }}
-                  >
-                    {' '}
+                  <div className="flex justify-between w-full text-pink-600">
                     <button
                       onClick={() => {
-                        changeStatus(!viewTeam);
+                        changeTeamStatus(!viewTeam);
+                        changeInvitesStatus(false);
                       }}
-                      className={'hover:opacity-50'}
                     >
                       Team Management
                     </button>
-                  </span>
+                    <button
+                      onClick={() => {
+                        changeTeamStatus(false);
+                        changeInvitesStatus(!viewInvites);
+                      }}
+                    >
+                      See Invites
+                    </button>
+                  </div>
                 </ConversationHeader.Content>
               </ConversationHeader>
               <MessageList>
